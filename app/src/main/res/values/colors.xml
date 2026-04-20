@@ -8,4 +8,13 @@
     <color name="light_background">#EAF3FF</color>
     <color name="light_surface">#F8FBFF</color>
     <color name="card_stroke">#D8E5F4</color>
+    <color name="screen_background">#F8FBFF</color>
+    <color name="surface_card">#FFFFFFFF</color>
+    <color name="surface_card_alt">#0D1B3D</color>
+    <color name="text_primary">#0D1B3D</color>
+    <color name="text_secondary">#5F6F8A</color>
+    <color name="text_on_dark">#FFFFFFFF</color>
+    <color name="text_muted_on_dark">#D7E6FF</color>
+    <color name="toolbar_background">#0D1B3D</color>
+    <color name="bottom_nav_background">#FFFFFFFF</color>
 </resources>

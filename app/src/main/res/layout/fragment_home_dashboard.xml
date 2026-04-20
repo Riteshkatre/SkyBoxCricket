@@ -10,7 +10,7 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/brand_navy"
+        app:cardBackgroundColor="@color/surface_card_alt"
         app:cardCornerRadius="24dp">
 
         <LinearLayout
@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/total_revenue_title"
-                android:textColor="@android:color/white"
+                android:textColor="@color/text_on_dark"
                 android:textSize="14sp" />
 
             <TextView
@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:textColor="@android:color/white"
+                android:textColor="@color/text_on_dark"
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:textColor="@color/light_background"
+                android:textColor="@color/text_muted_on_dark"
                 android:textSize="14sp" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            app:cardBackgroundColor="@android:color/white"
+            app:cardBackgroundColor="@color/surface_card"
             app:cardCornerRadius="20dp">
 
             <LinearLayout
@@ -69,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/online_revenue_title"
-                    android:textColor="@color/brand_slate"
+                    android:textColor="@color/text_secondary"
                     android:textSize="13sp" />
 
                 <TextView
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
-            app:cardBackgroundColor="@android:color/white"
+            app:cardBackgroundColor="@color/surface_card"
             app:cardCornerRadius="20dp">
 
             <LinearLayout
@@ -101,7 +101,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/offline_revenue_title"
-                    android:textColor="@color/brand_slate"
+                    android:textColor="@color/text_secondary"
                     android:textSize="13sp" />
 
                 <TextView
@@ -121,7 +121,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/recent_bookings"
-        android:textColor="@color/brand_navy"
+        android:textColor="@color/text_primary"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -140,7 +140,7 @@
         android:layout_marginTop="24dp"
         android:gravity="center"
         android:text="@string/no_bookings_yet"
-        android:textColor="@color/brand_slate"
+        android:textColor="@color/text_secondary"
         android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
