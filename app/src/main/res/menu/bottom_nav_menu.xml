@@ -5,6 +5,10 @@
         android:icon="@android:drawable/ic_menu_view"
         android:title="@string/nav_home" />
     <item
+        android:id="@+id/navigation_availability"
+        android:icon="@android:drawable/ic_menu_my_calendar"
+        android:title="@string/nav_availability" />
+    <item
         android:id="@+id/navigation_booking"
         android:icon="@android:drawable/ic_input_add"
         android:title="@string/nav_booking" />

@@ -5,24 +5,32 @@
     android:layout_height="match_parent"
     android:background="@color/screen_background">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topAppBar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/toolbar_background"
-        android:minHeight="?attr/actionBarSize"
-        android:paddingStart="16dp"
-        android:paddingEnd="8dp"
-        android:title="@string/dashboard_title"
-        android:titleTextColor="@color/text_on_dark"
-        app:menu="@menu/home_toolbar_menu" />
+        android:background="@color/toolbar_background"
+        android:elevation="0dp">
 
-    <FrameLayout
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/transparent"
+            android:minHeight="?attr/actionBarSize"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp"
+            android:title="@string/dashboard_title"
+            android:titleTextColor="@color/text_on_dark"
+            app:menu="@menu/home_toolbar_menu"
+            app:titleCentered="false" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:layout_marginBottom="72dp" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -30,8 +38,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/bottom_nav_background"
+        android:elevation="12dp"
+        android:paddingTop="8dp"
         app:itemIconTint="@color/nav_item_colors"
         app:itemTextColor="@color/nav_item_colors"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -27,6 +27,9 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
+            android:name=".EditBookingActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomeActivity"
             android:exported="false" />
         <activity

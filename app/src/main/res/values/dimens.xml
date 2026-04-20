@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="bottom_nav_extra_padding">12dp</dimen>
+    <dimen name="content_bottom_spacing">108dp</dimen>
+    <dimen name="page_horizontal_padding">16dp</dimen>
+    <dimen name="page_vertical_padding">16dp</dimen>
+</resources>

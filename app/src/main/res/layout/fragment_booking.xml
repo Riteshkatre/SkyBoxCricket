@@ -10,7 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingStart="@dimen/page_horizontal_padding"
+        android:paddingTop="@dimen/page_vertical_padding"
+        android:paddingEnd="@dimen/page_horizontal_padding"
+        android:paddingBottom="@dimen/content_bottom_spacing">
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -25,6 +28,7 @@
                 android:padding="20dp">
 
                 <TextView
+                    android:id="@+id/bookingTitleTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/new_booking"
@@ -33,6 +37,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/bookingSubtitleTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"

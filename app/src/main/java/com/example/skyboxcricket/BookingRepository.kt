@@ -31,6 +31,52 @@ class BookingRepository(
             }
     }
 
+    fun updateBooking(
+        booking: Booking,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val userId = auth.currentUser?.uid ?: run {
+            onError("User session expired. Please login again.")
+            return
+        }
+
+        if (booking.id.isBlank()) {
+            onError("Booking id missing.")
+            return
+        }
+
+        database.getReference("users").child(userId).child("bookings").child(booking.id)
+            .setValue(booking)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { error ->
+                onError(error.localizedMessage ?: "Unable to update booking.")
+            }
+    }
+
+    fun deleteBooking(
+        bookingId: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val userId = auth.currentUser?.uid ?: run {
+            onError("User session expired. Please login again.")
+            return
+        }
+
+        if (bookingId.isBlank()) {
+            onError("Booking id missing.")
+            return
+        }
+
+        database.getReference("users").child(userId).child("bookings").child(bookingId)
+            .removeValue()
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { error ->
+                onError(error.localizedMessage ?: "Unable to delete booking.")
+            }
+    }
+
     fun observeBookings(
         onChanged: (List<Booking>) -> Unit,
         onError: (String) -> Unit

@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.skyboxcricket.databinding.FragmentHomeDashboardBinding
 import com.google.firebase.database.ValueEventListener
 import java.text.NumberFormat
@@ -19,7 +19,6 @@ class HomeDashboardFragment : Fragment() {
 
     private val repository = BookingRepository()
     private var bookingListener: ValueEventListener? = null
-    private val adapter = BookingListAdapter()
     private val currencyFormatter = NumberFormat.getCurrencyInstance(Locale("en", "IN"))
 
     override fun onCreateView(
@@ -33,8 +32,6 @@ class HomeDashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.recentRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.recentRecyclerView.adapter = adapter
     }
 
     override fun onStart() {
@@ -58,20 +55,36 @@ class HomeDashboardFragment : Fragment() {
         val totalRevenue = bookings.sumOf { it.totalAmount }
         val onlineRevenue = bookings.sumOf { it.onlineAmount }
         val offlineRevenue = bookings.sumOf { it.offlineAmount }
+        val boxRevenue = bookings.sumOf { it.boxPrice }
+        val cafeRevenue = bookings.sumOf { it.cafePrice }
 
         binding.revenueValueTextView.text = currencyFormatter.format(totalRevenue)
         binding.onlineRevenueValueTextView.text = currencyFormatter.format(onlineRevenue)
         binding.offlineRevenueValueTextView.text = currencyFormatter.format(offlineRevenue)
         binding.totalBookingsValueTextView.text =
             getString(R.string.total_bookings_value, bookings.size)
+        binding.chartCenterValueTextView.text = currencyFormatter.format(totalRevenue)
+        binding.chartCenterLabelTextView.text =
+            if (bookings.isEmpty()) getString(R.string.no_data_label) else getString(R.string.total_revenue_title)
+        binding.revenuePieChartView.setData(totalRevenue, onlineRevenue, offlineRevenue)
+        binding.boxCafePieChartView.setCustomPairData(
+            firstValue = boxRevenue,
+            secondValue = cafeRevenue,
+            firstColor = ContextCompat.getColor(requireContext(), R.color.brand_orange),
+            secondColor = ContextCompat.getColor(requireContext(), R.color.brand_blue)
+        )
+        binding.boxCafeCenterValueTextView.text = currencyFormatter.format(boxRevenue + cafeRevenue)
+        binding.boxCafeStatBoxValueTextView.text = currencyFormatter.format(boxRevenue)
+        binding.boxCafeStatCafeValueTextView.text = currencyFormatter.format(cafeRevenue)
+        binding.statOnlineValueTextView.text = currencyFormatter.format(onlineRevenue)
+        binding.statOfflineValueTextView.text = currencyFormatter.format(offlineRevenue)
+        binding.statTotalValueTextView.text = currencyFormatter.format(totalRevenue)
+        binding.statBookingsValueTextView.text = bookings.size.toString()
 
         if (bookings.isEmpty()) {
             binding.emptyStateTextView.visibility = View.VISIBLE
-            binding.recentRecyclerView.visibility = View.GONE
         } else {
             binding.emptyStateTextView.visibility = View.GONE
-            binding.recentRecyclerView.visibility = View.VISIBLE
-            adapter.submitList(bookings.take(10))
         }
     }
 

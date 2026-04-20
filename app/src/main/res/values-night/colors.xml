@@ -17,4 +17,6 @@
     <color name="text_muted_on_dark">#BFDBFE</color>
     <color name="toolbar_background">#020817</color>
     <color name="bottom_nav_background">#0F172A</color>
+    <color name="brand_orange">#FBBF24</color>
+    <color name="chip_background">#3B2A10</color>
 </resources>

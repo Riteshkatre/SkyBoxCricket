@@ -2,7 +2,10 @@ package com.example.skyboxcricket
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.skyboxcricket.databinding.ActivityHomeBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -14,6 +17,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -22,6 +26,8 @@ class HomeActivity : AppCompatActivity() {
             openAuth()
             return
         }
+
+        setupInsets()
 
         binding.topAppBar.setOnMenuItemClickListener { item ->
             if (item.itemId == R.id.action_logout) {
@@ -36,16 +42,25 @@ class HomeActivity : AppCompatActivity() {
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
+                    binding.topAppBar.title = getString(R.string.dashboard_title)
                     openFragment(HomeDashboardFragment())
                     true
                 }
 
+                R.id.navigation_availability -> {
+                    binding.topAppBar.title = getString(R.string.availability_title)
+                    openFragment(AvailabilityFragment())
+                    true
+                }
+
                 R.id.navigation_booking -> {
+                    binding.topAppBar.title = getString(R.string.booking_tab_title)
                     openFragment(BookingFragment())
                     true
                 }
 
                 R.id.navigation_revenue -> {
+                    binding.topAppBar.title = getString(R.string.revenue_tab_title)
                     openFragment(RevenueFragment())
                     true
                 }
@@ -56,6 +71,35 @@ class HomeActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             binding.bottomNavigationView.selectedItemId = R.id.navigation_home
+        }
+    }
+
+    private fun setupInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            binding.appBarLayout.setPadding(
+                binding.appBarLayout.paddingLeft,
+                systemBars.top,
+                binding.appBarLayout.paddingRight,
+                binding.appBarLayout.paddingBottom
+            )
+
+            binding.bottomNavigationView.setPadding(
+                binding.bottomNavigationView.paddingLeft,
+                binding.bottomNavigationView.paddingTop,
+                binding.bottomNavigationView.paddingRight,
+                systemBars.bottom + resources.getDimensionPixelSize(R.dimen.bottom_nav_extra_padding)
+            )
+
+            binding.fragmentContainer.setPadding(
+                binding.fragmentContainer.paddingLeft,
+                binding.fragmentContainer.paddingTop,
+                binding.fragmentContainer.paddingRight,
+                resources.getDimensionPixelSize(R.dimen.content_bottom_spacing)
+            )
+
+            insets
         }
     }
 

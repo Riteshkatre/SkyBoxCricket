@@ -7,7 +7,10 @@ import com.example.skyboxcricket.databinding.ItemBookingBinding
 import java.text.NumberFormat
 import java.util.Locale
 
-class BookingListAdapter : RecyclerView.Adapter<BookingListAdapter.BookingViewHolder>() {
+class BookingListAdapter(
+    private val onEdit: ((Booking) -> Unit)? = null,
+    private val onDelete: ((Booking) -> Unit)? = null
+) : RecyclerView.Adapter<BookingListAdapter.BookingViewHolder>() {
 
     private val items = mutableListOf<Booking>()
     private val currencyFormatter = NumberFormat.getCurrencyInstance(Locale("en", "IN"))
@@ -52,6 +55,10 @@ class BookingListAdapter : RecyclerView.Adapter<BookingListAdapter.BookingViewHo
                 currencyFormatter.format(booking.boxPrice),
                 currencyFormatter.format(booking.cafePrice)
             )
+            val actionsVisible = if (onEdit != null || onDelete != null) android.view.View.VISIBLE else android.view.View.GONE
+            binding.actionsContainer.visibility = actionsVisible
+            binding.editButton.setOnClickListener { onEdit?.invoke(booking) }
+            binding.deleteButton.setOnClickListener { onDelete?.invoke(booking) }
         }
     }
 }
