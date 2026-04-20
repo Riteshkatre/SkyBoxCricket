@@ -1,3 +1,64 @@
 <resources>
     <string name="app_name">SkyBoxCricket</string>
+    <string name="splash_tagline">Bookings, revenue, and reports in one place</string>
+    <string name="auth_subtitle">Create your account or sign in to continue</string>
+    <string name="sign_up_tab">Sign Up</string>
+    <string name="sign_in_tab">Sign In</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="create_account">Create Account</string>
+    <string name="sign_in_button">Submit</string>
+    <string name="fill_all_fields">Please fill all fields.</string>
+    <string name="password_mismatch">Password and confirm password must match.</string>
+    <string name="account_created">Account created successfully.</string>
+    <string name="auth_failed">Authentication failed. Please try again.</string>
+    <string name="login_success">Login successful.</string>
+    <string name="home_title">Money Management</string>
+    <string name="welcome_user">Welcome, %1$s</string>
+    <string name="logout">Logout</string>
+    <string name="dashboard_title">SkyBox Revenue</string>
+    <string name="revenue_last_seven_days">Revenue for the last 7 days</string>
+    <string name="total_revenue_title">Total revenue</string>
+    <string name="online_revenue_title">Online revenue</string>
+    <string name="offline_revenue_title">Offline revenue</string>
+    <string name="recent_bookings">Recent bookings</string>
+    <string name="no_bookings_yet">No bookings added yet.</string>
+    <string name="total_bookings_value">Total bookings: %1$d</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_booking">Booking</string>
+    <string name="nav_revenue">Revenue</string>
+    <string name="new_booking">New booking</string>
+    <string name="booking_subtitle">Add customer, box, booking time, payment split, and amount details.</string>
+    <string name="name_hint">Customer name</string>
+    <string name="box_selection_hint">Select box</string>
+    <string name="date_hint">Booking date</string>
+    <string name="time_hint">Booking time</string>
+    <string name="booking_date_time_hint">Booking time and date</string>
+    <string name="to_date_time_hint">To date and time</string>
+    <string name="box_price_hint">Price for box</string>
+    <string name="cafe_price_hint">Price for cafe</string>
+    <string name="total_amount_hint">Total amount</string>
+    <string name="payment_mode">Mode of payment</string>
+    <string name="online_mode">Online</string>
+    <string name="offline_mode">Offline</string>
+    <string name="online_amount_hint">Online payment amount</string>
+    <string name="offline_amount_hint">Offline payment amount</string>
+    <string name="submit_booking">Submit</string>
+    <string name="fill_booking_fields">Please fill all booking fields.</string>
+    <string name="booking_saved">Booking saved successfully.</string>
+    <string name="payment_split_error">Online and offline amount total must match total amount.</string>
+    <string name="monthly_revenue_title">Current month revenue</string>
+    <string name="export_revenue">Print / Export Excel</string>
+    <string name="no_month_revenue">No revenue records for this month.</string>
+    <string name="no_revenue_to_export">No revenue available to export.</string>
+    <string name="booking_meta">%1$s | %2$s to %3$s</string>
+    <string name="price_split">Box: %1$s   Cafe: %2$s</string>
+    <string name="payment_split">Online: %1$s   Offline: %2$s</string>
+
+    <string-array name="box_selection_options">
+        <item>Open Box 1</item>
+        <item>Open Box 2</item>
+        <item>Both</item>
+    </string-array>
 </resources>

@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "75901325501",
+    "firebase_url": "https://crickereventbooking-default-rtdb.firebaseio.com",
+    "project_id": "crickereventbooking",
+    "storage_bucket": "crickereventbooking.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:75901325501:android:f1ee9ceff73199422927d4",
+        "android_client_info": {
+          "package_name": "com.example.cricketbookingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "75901325501-5t3ep50vrnpkqaqbhn2nucsc8fu316jm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cricketbookingapp",
+            "certificate_hash": "9c6081ff7810e09e5e4b5d4e3765530c49c8892f"
+          }
+        },
+        {
+          "client_id": "75901325501-40ah5aeelj9amtrs09illuu84kcosltt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6q4aRFHJ0MsRYWqsKDGo0h7xcN6CXXy4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "75901325501-40ah5aeelj9amtrs09illuu84kcosltt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:75901325501:android:b95365f34cb5b6372927d4",
+        "android_client_info": {
+          "package_name": "com.example.skyboxcricket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "75901325501-40ah5aeelj9amtrs09illuu84kcosltt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6q4aRFHJ0MsRYWqsKDGo0h7xcN6CXXy4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "75901325501-40ah5aeelj9amtrs09illuu84kcosltt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
