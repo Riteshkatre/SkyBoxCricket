@@ -63,18 +63,18 @@ The app is built using **Android** and integrates **Firebase APIs** for real-tim
 ## 📸 Screenshots
 
 ### Home Screen
-<img src="screenshot/home_page1.png" width="200" height="400" />
-<img src="screenshot/home_page2.png" width="200" height="400" />
+<img src="app/screenshot/home_page1.png" width="200" height="400" />
+<img src="app/screenshot/home_page2.png" width="200" height="400" />
 
 
 ### Shown Booked Slot Screen
-<img src="screenshot/slot_page.png" width="200" height="400" />
+<img src="app/screenshot/slot_page.png" width="200" height="400" />
 
 ### Add Booking Form Screen
-<img src="screenshot/form_page.png" width="200" height="400" />
+<img src="app/screenshot/form_page.png" width="200" height="400" />
 
 
 ### Revenue Screen
-<img src="screenshot/revenue_page.png" width="200" height="400" />
+<img src="app/screenshot/revenue_page.png" width="200" height="400" />
 
 ---
