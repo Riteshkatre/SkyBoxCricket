@@ -169,7 +169,7 @@
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="280dp"
+                    android:layout_height="200dp"
                     android:layout_marginTop="12dp">
 
                     <com.example.skyboxcricket.RevenuePieChartView
@@ -370,7 +370,7 @@
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="232dp"
+                    android:layout_height="200dp"
                     android:layout_marginTop="12dp">
 
                     <com.example.skyboxcricket.RevenuePieChartView
@@ -415,7 +415,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@color/surface_card_alt"
+                        android:background="@color/toolbar_background"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingHorizontal="12dp"
@@ -442,7 +442,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@color/surface_card_alt"
+                        android:background="@color/toolbar_background"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingHorizontal="12dp"

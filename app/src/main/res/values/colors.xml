@@ -15,7 +15,7 @@
     <color name="text_secondary">#5F6F8A</color>
     <color name="text_on_dark">#FFFFFFFF</color>
     <color name="text_muted_on_dark">#D7E6FF</color>
-    <color name="toolbar_background">#0D1B3D</color>
+    <color name="toolbar_background">#D8E5F4</color>
     <color name="bottom_nav_background">#FFFFFFFF</color>
     <color name="brand_orange">#F59E0B</color>
     <color name="chip_background">#FEF3C7</color>
