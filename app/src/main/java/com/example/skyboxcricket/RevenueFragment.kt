@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.skyboxcricket.databinding.FragmentRevenueBinding
 import com.google.firebase.database.ValueEventListener
 import java.text.NumberFormat
@@ -45,7 +46,8 @@ class RevenueFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadingDialog = activity?.let(::AppLoadingDialog)
-        binding.revenueRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.revenueRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         binding.revenueRecyclerView.adapter = adapter
         binding.selectRevenueDateButton.setOnClickListener { showDateFilterOptions() }
         binding.exportButton.setOnClickListener {

@@ -25,42 +25,6 @@
             android:paddingEnd="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:scrollbars="none">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/box1FilterButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="0dp"
-                    android:text="@string/filter_box_1" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/box2FilterButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:minWidth="0dp"
-                    android:text="@string/filter_box_2" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/bothFilterButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:minWidth="0dp"
-                    android:text="@string/filter_both" />
-            </LinearLayout>
-        </HorizontalScrollView>
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/selectDateFilterButton"
             style="?attr/materialButtonOutlinedStyle"

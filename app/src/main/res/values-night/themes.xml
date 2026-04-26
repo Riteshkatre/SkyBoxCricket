@@ -4,8 +4,21 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/brand_navy</item>
         <item name="colorSurface">@color/surface_card</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+        <item name="colorOutline">@color/card_stroke</item>
         <item name="android:colorBackground">@color/screen_background</item>
+        <item name="android:windowBackground">@color/screen_background</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="toolbarStyle">@style/Widget.SkyBoxCricket.Toolbar</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Widget.SkyBoxCricket.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="titleTextColor">@color/toolbar_content</item>
+        <item name="subtitleTextColor">@color/text_secondary</item>
+        <item name="navigationIconTint">@color/toolbar_content</item>
     </style>
 </resources>

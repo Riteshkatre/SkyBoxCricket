@@ -21,7 +21,7 @@
             android:paddingStart="16dp"
             android:paddingEnd="8dp"
             android:title="@string/dashboard_title"
-            android:titleTextColor="@color/text_on_dark"
+            android:titleTextColor="@color/text_primary"
             app:menu="@menu/home_toolbar_menu"
             app:titleCentered="false" />
     </com.google.android.material.appbar.AppBarLayout>

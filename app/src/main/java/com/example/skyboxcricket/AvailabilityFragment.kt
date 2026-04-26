@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.skyboxcricket.databinding.FragmentAvailabilityBinding
@@ -31,9 +30,6 @@ class AvailabilityFragment : Fragment() {
 
     private var allBookings: List<Booking> = emptyList()
     private var selectedDateMillis: Long = startOfDay(Calendar.getInstance().timeInMillis)
-    private var selectedFilter: String = FILTER_BOX_1
-    private var rangeStartMillis: Long? = null
-    private var rangeEndMillis: Long? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,13 +51,9 @@ class AvailabilityFragment : Fragment() {
         binding.availabilityRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.availabilityRecyclerView.adapter = bookingAdapter
 
-        binding.box1FilterButton.setOnClickListener { updateFilter(FILTER_BOX_1) }
-        binding.box2FilterButton.setOnClickListener { updateFilter(FILTER_BOX_2) }
-        binding.bothFilterButton.setOnClickListener { updateFilter(FILTER_BOTH) }
-        binding.selectDateFilterButton.setOnClickListener { showDateFilterOptions() }
+        binding.selectDateFilterButton.setOnClickListener { pickSingleDate() }
 
         updateDateStrip()
-        updateFilterButtons()
     }
 
     override fun onStart() {
@@ -113,44 +105,16 @@ class AvailabilityFragment : Fragment() {
 
     private fun onDateSelected(item: AvailabilityDateItem) {
         selectedDateMillis = item.timestamp
-        rangeStartMillis = null
-        rangeEndMillis = null
         binding.selectedDateTextView.text = item.fullDateLabel
         updateDateStrip()
         renderAvailability()
     }
 
-    private fun updateFilter(filter: String) {
-        selectedFilter = filter
-        updateFilterButtons()
-        renderAvailability()
-    }
-
-    private fun updateFilterButtons() {
-        updateFilterButton(binding.box1FilterButton, selectedFilter == FILTER_BOX_1)
-        updateFilterButton(binding.box2FilterButton, selectedFilter == FILTER_BOX_2)
-        updateFilterButton(binding.bothFilterButton, selectedFilter == FILTER_BOTH)
-    }
-
-    private fun updateFilterButton(button: com.google.android.material.button.MaterialButton, isSelected: Boolean) {
-        if (isSelected) {
-            button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.brand_blue))
-            button.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_on_dark))
-        } else {
-            button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.surface_card))
-            button.setTextColor(ContextCompat.getColor(requireContext(), R.color.brand_orange))
-        }
-    }
-
     private fun renderAvailability() {
-        binding.selectedDateTextView.text = when {
-            rangeStartMillis != null && rangeEndMillis != null ->
-                BookingDateUtils.formatRangeLabel(rangeStartMillis!!, rangeEndMillis!!)
-            else -> BookingDateUtils.formatDateLabel(selectedDateMillis)
-        }
+        binding.selectedDateTextView.text = BookingDateUtils.formatDateLabel(selectedDateMillis)
 
         val filteredBookings = allBookings.filter { booking ->
-            booking.matchesDateFilter() && booking.matchesFilter(selectedFilter)
+            booking.belongsToDate(selectedDateMillis)
         }
 
         if (filteredBookings.isEmpty()) {
@@ -168,51 +132,8 @@ class AvailabilityFragment : Fragment() {
         return BookingDateUtils.startOfDay(parsedDate) == targetDayMillis
     }
 
-    private fun Booking.matchesDateFilter(): Boolean {
-        val parsedDate = BookingDateUtils.parseDateTime(bookingDateTime)?.time ?: return false
-        val bookingDay = BookingDateUtils.startOfDay(parsedDate)
-        return if (rangeStartMillis != null && rangeEndMillis != null) {
-            bookingDay in rangeStartMillis!!..rangeEndMillis!!
-        } else {
-            belongsToDate(selectedDateMillis)
-        }
-    }
-
-    private fun Booking.matchesFilter(filter: String): Boolean {
-        return when (filter) {
-            FILTER_BOX_1 -> boxSelection.equals("Open Box 1", ignoreCase = true)
-            FILTER_BOX_2 -> boxSelection.equals("Open Box 2", ignoreCase = true)
-            FILTER_BOTH -> boxSelection.equals("Both", ignoreCase = true)
-            else -> true
-        }
-    }
-
     private fun startOfDay(timeInMillis: Long): Long {
         return BookingDateUtils.startOfDay(timeInMillis)
-    }
-
-    private fun showDateFilterOptions() {
-        val options = arrayOf(
-            getString(R.string.single_date_filter),
-            getString(R.string.range_date_filter),
-            getString(R.string.clear_date_filter)
-        )
-        AlertDialog.Builder(requireContext())
-            .setTitle(R.string.select_date_filter_title)
-            .setItems(options) { _, which ->
-                when (which) {
-                    0 -> pickSingleDate()
-                    1 -> pickRangeStartDate()
-                    2 -> {
-                        rangeStartMillis = null
-                        rangeEndMillis = null
-                        selectedDateMillis = startOfDay(System.currentTimeMillis())
-                        updateDateStrip()
-                        renderAvailability()
-                    }
-                }
-            }
-            .show()
     }
 
     private fun pickSingleDate() {
@@ -222,44 +143,7 @@ class AvailabilityFragment : Fragment() {
             { _, year, month, day ->
                 calendar.set(year, month, day)
                 selectedDateMillis = startOfDay(calendar.timeInMillis)
-                rangeStartMillis = null
-                rangeEndMillis = null
                 updateDateStrip()
-                renderAvailability()
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        ).show()
-    }
-
-    private fun pickRangeStartDate() {
-        val calendar = Calendar.getInstance()
-        android.app.DatePickerDialog(
-            requireContext(),
-            { _, year, month, day ->
-                calendar.set(year, month, day)
-                rangeStartMillis = startOfDay(calendar.timeInMillis)
-                pickRangeEndDate()
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        ).show()
-    }
-
-    private fun pickRangeEndDate() {
-        val calendar = Calendar.getInstance().apply { timeInMillis = rangeStartMillis ?: System.currentTimeMillis() }
-        android.app.DatePickerDialog(
-            requireContext(),
-            { _, year, month, day ->
-                calendar.set(year, month, day)
-                rangeEndMillis = startOfDay(calendar.timeInMillis)
-                if (rangeStartMillis != null && rangeEndMillis != null && rangeEndMillis!! < rangeStartMillis!!) {
-                    val temp = rangeStartMillis
-                    rangeStartMillis = rangeEndMillis
-                    rangeEndMillis = temp
-                }
                 renderAvailability()
             },
             calendar.get(Calendar.YEAR),
@@ -305,11 +189,5 @@ class AvailabilityFragment : Fragment() {
         loadingDialog = null
         _binding = null
         super.onDestroyView()
-    }
-
-    companion object {
-        private const val FILTER_BOX_1 = "box_1"
-        private const val FILTER_BOX_2 = "box_2"
-        private const val FILTER_BOTH = "both"
     }
 }

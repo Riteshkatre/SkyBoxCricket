@@ -17,6 +17,13 @@
     <color name="text_muted_on_dark">#BFDBFE</color>
     <color name="toolbar_background">#020817</color>
     <color name="bottom_nav_background">#0F172A</color>
+    <color name="toolbar_content">#E5EEF9</color>
     <color name="brand_orange">#FBBF24</color>
     <color name="chip_background">#3B2A10</color>
+    <color name="screen_bg">#020817</color>
+    <color name="stroke_soft">#32425D</color>
+    <color name="surface_soft">#1D2A3F</color>
+    <color name="loader_ring_track">#243044</color>
+    <color name="brand_primary">#FBBF24</color>
+    <color name="loader_scrim">#99020817</color>
 </resources>

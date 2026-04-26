@@ -27,7 +27,10 @@ class HomeActivity : AppCompatActivity() {
             return
         }
 
+        val isPrivilegedUser = UserAccess.isPrivilegedUser(auth.currentUser?.email)
+
         setupInsets()
+        configureNavigation(isPrivilegedUser)
 
         binding.topAppBar.setOnMenuItemClickListener { item ->
             if (item.itemId == R.id.action_logout) {
@@ -70,8 +73,15 @@ class HomeActivity : AppCompatActivity() {
         }
 
         if (savedInstanceState == null) {
-            binding.bottomNavigationView.selectedItemId = R.id.navigation_home
+            binding.bottomNavigationView.selectedItemId =
+                if (isPrivilegedUser) R.id.navigation_home else R.id.navigation_booking
         }
+    }
+
+    private fun configureNavigation(isPrivilegedUser: Boolean) {
+        val menu = binding.bottomNavigationView.menu
+        menu.findItem(R.id.navigation_home)?.isVisible = isPrivilegedUser
+        menu.findItem(R.id.navigation_revenue)?.isVisible = isPrivilegedUser
     }
 
     private fun setupInsets() {
