@@ -20,6 +20,7 @@ import kotlin.math.abs
 class EditBookingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditBookingBinding
+    private lateinit var loadingDialog: AppLoadingDialog
     private val repository = BookingRepository()
     private val bookingCalendar = java.util.Calendar.getInstance()
     private val toCalendar = java.util.Calendar.getInstance()
@@ -38,6 +39,7 @@ class EditBookingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityEditBookingBinding.inflate(layoutInflater)
+        loadingDialog = AppLoadingDialog(this)
         setContentView(binding.root)
 
         setupInsets()
@@ -202,7 +204,11 @@ class EditBookingActivity : AppCompatActivity() {
     }
 
     private fun setLoading(isLoading: Boolean) = with(binding.formContent) {
-        bookingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        if (isLoading) {
+            loadingDialog.show()
+        } else {
+            loadingDialog.dismiss()
+        }
         submitBookingButton.isEnabled = !isLoading
     }
 
@@ -211,6 +217,7 @@ class EditBookingActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        loadingDialog.dismiss()
         binding.formContent.boxPriceEditText.removeTextChangedListener(amountWatcher)
         binding.formContent.cafePriceEditText.removeTextChangedListener(amountWatcher)
         super.onDestroy()

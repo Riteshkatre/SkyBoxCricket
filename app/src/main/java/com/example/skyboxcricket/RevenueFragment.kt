@@ -18,6 +18,7 @@ class RevenueFragment : Fragment() {
 
     private var _binding: FragmentRevenueBinding? = null
     private val binding get() = _binding!!
+    private var loadingDialog: AppLoadingDialog? = null
 
     private val repository = BookingRepository()
     private val adapter = BookingListAdapter(
@@ -43,6 +44,7 @@ class RevenueFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadingDialog = activity?.let(::AppLoadingDialog)
         binding.revenueRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.revenueRecyclerView.adapter = adapter
         binding.selectRevenueDateButton.setOnClickListener { showDateFilterOptions() }
@@ -57,7 +59,7 @@ class RevenueFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        binding.revenueProgressBar.visibility = View.VISIBLE
+        loadingDialog?.show()
         bookingListener = repository.observeBookings(
             onChanged = {
                 allBookings = it
@@ -68,13 +70,14 @@ class RevenueFragment : Fragment() {
     }
 
     override fun onStop() {
+        loadingDialog?.dismiss()
         repository.removeListener(bookingListener)
         bookingListener = null
         super.onStop()
     }
 
     private fun renderRevenue(bookings: List<Booking>) {
-        binding.revenueProgressBar.visibility = View.GONE
+        loadingDialog?.dismiss()
 
         monthBookings = bookings.filter { booking ->
             val parsed = BookingDateUtils.parseDateTime(booking.bookingDateTime)?.time ?: booking.createdAt
@@ -113,11 +116,13 @@ class RevenueFragment : Fragment() {
 
     private fun showMessage(message: String) {
         if (!isAdded) return
-        binding.revenueProgressBar.visibility = View.GONE
+        loadingDialog?.dismiss()
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
+        loadingDialog?.dismiss()
+        loadingDialog = null
         _binding = null
         super.onDestroyView()
     }
@@ -208,10 +213,17 @@ class RevenueFragment : Fragment() {
             .setMessage(R.string.delete_booking_message)
             .setNegativeButton(R.string.cancel_text, null)
             .setPositiveButton(R.string.delete_text) { _, _ ->
+                loadingDialog?.show()
                 repository.deleteBooking(
                     bookingId = booking.id,
-                    onSuccess = { showMessage(getString(R.string.booking_deleted)) },
-                    onError = ::showMessage
+                    onSuccess = {
+                        loadingDialog?.dismiss()
+                        showMessage(getString(R.string.booking_deleted))
+                    },
+                    onError = { message ->
+                        loadingDialog?.dismiss()
+                        showMessage(message)
+                    }
                 )
             }
             .show()

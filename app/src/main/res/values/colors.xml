@@ -19,4 +19,11 @@
     <color name="bottom_nav_background">#FFFFFFFF</color>
     <color name="brand_orange">#F59E0B</color>
     <color name="chip_background">#FEF3C7</color>
+    <color name="screen_bg">#FFFFFFFF</color>
+    <color name="stroke_soft">#F5D4AD</color>
+    <color name="surface_soft">#FFF1E2</color>
+    <color name="loader_ring_track">#FAD4AE</color>
+    <color name="brand_primary">#F7931E</color>
+    <color name="loader_scrim">#7A1A0F05</color>
+
 </resources>

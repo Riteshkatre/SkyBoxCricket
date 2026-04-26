@@ -21,6 +21,7 @@ class BookingFragment : Fragment() {
 
     private var _binding: FragmentBookingBinding? = null
     private val binding get() = _binding!!
+    private var loadingDialog: AppLoadingDialog? = null
 
     private val repository = BookingRepository()
     private val bookingCalendar = Calendar.getInstance()
@@ -45,6 +46,7 @@ class BookingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadingDialog = activity?.let(::AppLoadingDialog)
         setupDropdown()
         setupPriceWatchers()
         binding.bookingDateTimeEditText.setOnClickListener {
@@ -181,7 +183,11 @@ class BookingFragment : Fragment() {
     }
 
     private fun setLoading(isLoading: Boolean) {
-        binding.bookingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        if (isLoading) {
+            loadingDialog?.show()
+        } else {
+            loadingDialog?.dismiss()
+        }
         binding.submitBookingButton.isEnabled = !isLoading
     }
 
@@ -190,6 +196,8 @@ class BookingFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        loadingDialog?.dismiss()
+        loadingDialog = null
         binding.boxPriceEditText.removeTextChangedListener(amountWatcher)
         binding.cafePriceEditText.removeTextChangedListener(amountWatcher)
         _binding = null

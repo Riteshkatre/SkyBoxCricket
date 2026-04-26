@@ -88,6 +88,8 @@
     <string name="save_changes">Save changes</string>
     <string name="booking_updated">Booking updated successfully.</string>
     <string name="booking_deleted">Booking deleted successfully.</string>
+    <string name="loading_message">Please wait...</string>
+
 
     <string-array name="box_selection_options">
         <item>Open Box 1</item>

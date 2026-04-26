@@ -19,6 +19,7 @@ class AvailabilityFragment : Fragment() {
 
     private var _binding: FragmentAvailabilityBinding? = null
     private val binding get() = _binding!!
+    private var loadingDialog: AppLoadingDialog? = null
 
     private val repository = BookingRepository()
     private var bookingListener: ValueEventListener? = null
@@ -45,6 +46,7 @@ class AvailabilityFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadingDialog = activity?.let(::AppLoadingDialog)
 
         binding.dateRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -64,11 +66,11 @@ class AvailabilityFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        binding.availabilityProgressBar.visibility = View.VISIBLE
+        loadingDialog?.show()
         bookingListener = repository.observeBookings(
             onChanged = { bookings ->
                 allBookings = bookings
-                binding.availabilityProgressBar.visibility = View.GONE
+                loadingDialog?.dismiss()
                 renderAvailability()
             },
             onError = ::showMessage
@@ -76,6 +78,7 @@ class AvailabilityFragment : Fragment() {
     }
 
     override fun onStop() {
+        loadingDialog?.dismiss()
         repository.removeListener(bookingListener)
         bookingListener = null
         super.onStop()
@@ -275,10 +278,17 @@ class AvailabilityFragment : Fragment() {
             .setMessage(R.string.delete_booking_message)
             .setNegativeButton(R.string.cancel_text, null)
             .setPositiveButton(R.string.delete_text) { _, _ ->
+                loadingDialog?.show()
                 repository.deleteBooking(
                     bookingId = booking.id,
-                    onSuccess = { showMessage(getString(R.string.booking_deleted)) },
-                    onError = ::showMessage
+                    onSuccess = {
+                        loadingDialog?.dismiss()
+                        showMessage(getString(R.string.booking_deleted))
+                    },
+                    onError = { message ->
+                        loadingDialog?.dismiss()
+                        showMessage(message)
+                    }
                 )
             }
             .show()
@@ -286,11 +296,13 @@ class AvailabilityFragment : Fragment() {
 
     private fun showMessage(message: String) {
         if (!isAdded) return
-        binding.availabilityProgressBar.visibility = View.GONE
+        loadingDialog?.dismiss()
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
+        loadingDialog?.dismiss()
+        loadingDialog = null
         _binding = null
         super.onDestroyView()
     }

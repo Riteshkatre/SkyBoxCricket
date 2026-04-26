@@ -13,6 +13,7 @@ class AuthActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAuthBinding
     private lateinit var auth: FirebaseAuth
+    private lateinit var loadingDialog: AppLoadingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +21,7 @@ class AuthActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
+        loadingDialog = AppLoadingDialog(this)
 
         if (auth.currentUser != null) {
             openHome()
@@ -110,7 +112,11 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun setLoading(isLoading: Boolean) {
-        binding.authProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        if (isLoading) {
+            loadingDialog.show()
+        } else {
+            loadingDialog.dismiss()
+        }
         binding.createAccountButton.isEnabled = !isLoading
         binding.signInButton.isEnabled = !isLoading
     }
@@ -122,5 +128,10 @@ class AuthActivity : AppCompatActivity() {
 
     private fun showMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroy() {
+        loadingDialog.dismiss()
+        super.onDestroy()
     }
 }

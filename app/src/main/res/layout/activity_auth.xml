@@ -69,14 +69,6 @@
                         android:text="@string/sign_in_tab" />
                 </com.google.android.material.tabs.TabLayout>
 
-                <ProgressBar
-                    android:id="@+id/authProgressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20dp"
-                    android:visibility="gone" />
-
                 <LinearLayout
                     android:id="@+id/signUpContainer"
                     android:layout_width="match_parent"

@@ -79,14 +79,6 @@
             android:textSize="22sp"
             android:textStyle="bold" />
 
-        <ProgressBar
-            android:id="@+id/availabilityProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="18dp"
-            android:visibility="gone" />
-
         <TextView
             android:id="@+id/emptyAvailabilityTextView"
             android:layout_width="match_parent"

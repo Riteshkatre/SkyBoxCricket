@@ -16,6 +16,7 @@ class HomeDashboardFragment : Fragment() {
 
     private var _binding: FragmentHomeDashboardBinding? = null
     private val binding get() = _binding!!
+    private var loadingDialog: AppLoadingDialog? = null
 
     private val repository = BookingRepository()
     private var bookingListener: ValueEventListener? = null
@@ -32,11 +33,12 @@ class HomeDashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadingDialog = activity?.let(::AppLoadingDialog)
     }
 
     override fun onStart() {
         super.onStart()
-        binding.homeProgressBar.visibility = View.VISIBLE
+        loadingDialog?.show()
         bookingListener = repository.observeBookings(
             onChanged = ::renderBookings,
             onError = ::showMessage
@@ -44,13 +46,14 @@ class HomeDashboardFragment : Fragment() {
     }
 
     override fun onStop() {
+        loadingDialog?.dismiss()
         repository.removeListener(bookingListener)
         bookingListener = null
         super.onStop()
     }
 
     private fun renderBookings(bookings: List<Booking>) {
-        binding.homeProgressBar.visibility = View.GONE
+        loadingDialog?.dismiss()
 
         val totalRevenue = bookings.sumOf { it.totalAmount }
         val onlineRevenue = bookings.sumOf { it.onlineAmount }
@@ -90,11 +93,13 @@ class HomeDashboardFragment : Fragment() {
 
     private fun showMessage(message: String) {
         if (!isAdded) return
-        binding.homeProgressBar.visibility = View.GONE
+        loadingDialog?.dismiss()
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
+        loadingDialog?.dismiss()
+        loadingDialog = null
         _binding = null
         super.onDestroyView()
     }
