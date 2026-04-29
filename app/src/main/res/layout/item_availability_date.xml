@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="76dp"
-    android:layout_height="96dp"
+    android:layout_width="70dp"
+    android:layout_height="90dp"
     android:layout_marginEnd="10dp"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/monthLabelTextView"
@@ -19,17 +19,17 @@
         android:id="@+id/dayNumberTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="3dp"
         android:textColor="@color/text_primary"
-        android:textSize="26sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/dayLabelTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="3dp"
         android:textColor="@color/text_secondary"
-        android:textSize="12sp"
+        android:textSize="10sp"
         android:textStyle="bold" />
 </LinearLayout>

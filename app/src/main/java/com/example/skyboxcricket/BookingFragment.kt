@@ -15,8 +15,6 @@ import com.example.skyboxcricket.databinding.FragmentBookingBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import kotlin.math.abs
-
 class BookingFragment : Fragment() {
 
     private var _binding: FragmentBookingBinding? = null
@@ -26,6 +24,7 @@ class BookingFragment : Fragment() {
     private val repository = BookingRepository()
     private val bookingCalendar = Calendar.getInstance()
     private val toCalendar = Calendar.getInstance()
+    private var paymentSplitHelper: PaymentSplitAutoFillHelper? = null
 
     private val amountWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
@@ -49,6 +48,11 @@ class BookingFragment : Fragment() {
         loadingDialog = activity?.let(::AppLoadingDialog)
         setupDropdown()
         setupPriceWatchers()
+        paymentSplitHelper = PaymentSplitAutoFillHelper(
+            totalAmountEditText = binding.totalAmountEditText,
+            onlineAmountEditText = binding.onlineAmountEditText,
+            offlineAmountEditText = binding.offlineAmountEditText
+        ).also { it.attach() }
         binding.bookingDateTimeEditText.setOnClickListener {
             pickDateTime(
                 calendar = bookingCalendar,
@@ -136,8 +140,11 @@ class BookingFragment : Fragment() {
             return
         }
 
-        if (abs((onlineAmount + offlineAmount) - totalAmount) > 0.01) {
-            showMessage(getString(R.string.payment_split_error))
+        if (!PaymentSplitValidator.isValid(totalAmount, onlineAmount, offlineAmount)) {
+            val remainingAmount = PaymentSplitValidator.formatAmount(
+                PaymentSplitValidator.getRemainingAmount(totalAmount, onlineAmount, offlineAmount)
+            )
+            showMessage(getString(R.string.payment_split_remaining_error, remainingAmount))
             return
         }
 
@@ -178,8 +185,8 @@ class BookingFragment : Fragment() {
         binding.boxPriceEditText.text?.clear()
         binding.cafePriceEditText.text?.clear()
         binding.totalAmountEditText.text?.clear()
-        binding.onlineAmountEditText.text?.clear()
-        binding.offlineAmountEditText.text?.clear()
+        binding.onlineAmountEditText.setText("0")
+        binding.offlineAmountEditText.setText("0")
     }
 
     private fun setLoading(isLoading: Boolean) {
@@ -200,6 +207,8 @@ class BookingFragment : Fragment() {
         loadingDialog = null
         binding.boxPriceEditText.removeTextChangedListener(amountWatcher)
         binding.cafePriceEditText.removeTextChangedListener(amountWatcher)
+        paymentSplitHelper?.detach()
+        paymentSplitHelper = null
         _binding = null
         super.onDestroyView()
     }

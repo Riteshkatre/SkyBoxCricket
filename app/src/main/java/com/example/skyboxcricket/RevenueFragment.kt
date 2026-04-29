@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.skyboxcricket.databinding.FragmentRevenueBinding
 import com.google.firebase.database.ValueEventListener
 import java.text.NumberFormat
@@ -46,10 +45,10 @@ class RevenueFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadingDialog = activity?.let(::AppLoadingDialog)
-        binding.revenueRecyclerView.layoutManager =
-            LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        binding.revenueRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.revenueRecyclerView.adapter = adapter
         binding.selectRevenueDateButton.setOnClickListener { showDateFilterOptions() }
+        binding.clearRevenueFilterButton.setOnClickListener { clearRevenueFilter() }
         binding.exportButton.setOnClickListener {
             if (monthBookings.isEmpty()) {
                 showMessage(getString(R.string.no_revenue_to_export))
@@ -81,20 +80,9 @@ class RevenueFragment : Fragment() {
     private fun renderRevenue(bookings: List<Booking>) {
         loadingDialog?.dismiss()
 
-        monthBookings = bookings.filter { booking ->
-            val parsed = BookingDateUtils.parseDateTime(booking.bookingDateTime)?.time ?: booking.createdAt
-            val bookingDay = BookingDateUtils.startOfDay(parsed)
-            when {
-                rangeStartMillis != null && rangeEndMillis != null -> bookingDay in rangeStartMillis!!..rangeEndMillis!!
-                selectedDateMillis != null -> bookingDay == selectedDateMillis
-                else -> {
-                    val now = Calendar.getInstance()
-                    val bookingCalendar = Calendar.getInstance().apply { timeInMillis = parsed }
-                    bookingCalendar.get(Calendar.MONTH) == now.get(Calendar.MONTH) &&
-                        bookingCalendar.get(Calendar.YEAR) == now.get(Calendar.YEAR)
-                }
-            }
-        }
+        monthBookings = bookings
+            .filter(::matchesRevenueFilter)
+            .sortedByDescending(::bookingTimeInMillis)
 
         binding.monthRevenueValueTextView.text =
             currencyFormatter.format(monthBookings.sumOf { it.totalAmount })
@@ -105,6 +93,12 @@ class RevenueFragment : Fragment() {
                 BookingDateUtils.formatDateLabel(selectedDateMillis!!)
             else -> getString(R.string.current_month_filter)
         }
+        binding.clearRevenueFilterButton.visibility =
+            if (selectedDateMillis != null || (rangeStartMillis != null && rangeEndMillis != null)) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
 
         if (monthBookings.isEmpty()) {
             binding.revenueEmptyStateTextView.visibility = View.VISIBLE
@@ -114,6 +108,26 @@ class RevenueFragment : Fragment() {
             binding.revenueRecyclerView.visibility = View.VISIBLE
             adapter.submitList(monthBookings)
         }
+    }
+
+    private fun matchesRevenueFilter(booking: Booking): Boolean {
+        val bookingDay = BookingDateUtils.startOfDay(bookingTimeInMillis(booking))
+        return when {
+            rangeStartMillis != null && rangeEndMillis != null -> bookingDay in rangeStartMillis!!..rangeEndMillis!!
+            selectedDateMillis != null -> bookingDay == selectedDateMillis
+            else -> isInCurrentMonth(bookingTimeInMillis(booking))
+        }
+    }
+
+    private fun bookingTimeInMillis(booking: Booking): Long {
+        return BookingDateUtils.parseDateTime(booking.bookingDateTime)?.time ?: booking.createdAt
+    }
+
+    private fun isInCurrentMonth(timeInMillis: Long): Boolean {
+        val now = Calendar.getInstance()
+        val bookingCalendar = Calendar.getInstance().apply { this.timeInMillis = timeInMillis }
+        return bookingCalendar.get(Calendar.MONTH) == now.get(Calendar.MONTH) &&
+            bookingCalendar.get(Calendar.YEAR) == now.get(Calendar.YEAR)
     }
 
     private fun showMessage(message: String) {
@@ -141,15 +155,17 @@ class RevenueFragment : Fragment() {
                 when (which) {
                     0 -> pickSingleDate()
                     1 -> pickRangeStartDate()
-                    2 -> {
-                        selectedDateMillis = null
-                        rangeStartMillis = null
-                        rangeEndMillis = null
-                        renderRevenue(allBookings)
-                    }
+                    2 -> clearRevenueFilter()
                 }
             }
             .show()
+    }
+
+    private fun clearRevenueFilter() {
+        selectedDateMillis = null
+        rangeStartMillis = null
+        rangeEndMillis = null
+        renderRevenue(allBookings)
     }
 
     private fun pickSingleDate() {

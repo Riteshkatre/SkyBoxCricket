@@ -2,14 +2,14 @@ package com.example.skyboxcricket
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.example.skyboxcricket.databinding.DialogEditBookingBinding
-import kotlin.math.abs
-
 object BookingEditDialog {
 
     fun show(
@@ -36,6 +36,24 @@ object BookingEditDialog {
         binding.totalAmountEditText.setText(booking.totalAmount.toString())
         binding.onlineAmountEditText.setText(booking.onlineAmount.toString())
         binding.offlineAmountEditText.setText(booking.offlineAmount.toString())
+
+        val paymentSplitHelper = PaymentSplitAutoFillHelper(
+            totalAmountEditText = binding.totalAmountEditText,
+            onlineAmountEditText = binding.onlineAmountEditText,
+            offlineAmountEditText = binding.offlineAmountEditText
+        ).also { it.attach() }
+
+        val totalWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+            override fun afterTextChanged(s: Editable?) {
+                val boxPrice = binding.boxPriceEditText.text.toString().toDoubleOrNull() ?: 0.0
+                val cafePrice = binding.cafePriceEditText.text.toString().toDoubleOrNull() ?: 0.0
+                binding.totalAmountEditText.setText((boxPrice + cafePrice).toString())
+            }
+        }
+        binding.boxPriceEditText.addTextChangedListener(totalWatcher)
+        binding.cafePriceEditText.addTextChangedListener(totalWatcher)
 
         binding.bookingDateTimeEditText.setOnClickListener {
             pickDateTime(context, bookingCalendar) { value ->
@@ -79,14 +97,32 @@ object BookingEditDialog {
                     return@setOnClickListener
                 }
 
-                if (abs((updated.onlineAmount + updated.offlineAmount) - updated.totalAmount) > 0.01) {
-                    Toast.makeText(context, R.string.payment_split_error, Toast.LENGTH_SHORT).show()
+                if (!PaymentSplitValidator.isValid(updated.totalAmount, updated.onlineAmount, updated.offlineAmount)) {
+                    val remainingAmount = PaymentSplitValidator.formatAmount(
+                        PaymentSplitValidator.getRemainingAmount(
+                            updated.totalAmount,
+                            updated.onlineAmount,
+                            updated.offlineAmount
+                        )
+                    )
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.payment_split_remaining_error, remainingAmount),
+                        Toast.LENGTH_SHORT
+                    ).show()
                     return@setOnClickListener
                 }
 
                 onSave(updated)
+                paymentSplitHelper.detach()
                 dialog.dismiss()
             }
+        }
+
+        dialog.setOnDismissListener {
+            paymentSplitHelper.detach()
+            binding.boxPriceEditText.removeTextChangedListener(totalWatcher)
+            binding.cafePriceEditText.removeTextChangedListener(totalWatcher)
         }
 
         dialog.show()

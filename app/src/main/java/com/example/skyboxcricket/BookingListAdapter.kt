@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.skyboxcricket.databinding.ItemBookingBinding
-import com.google.android.play.integrity.internal.n
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -62,4 +61,5 @@ class BookingListAdapter(
             binding.deleteButton.setOnClickListener { onDelete?.invoke(booking) }
         }
     }
+
 }

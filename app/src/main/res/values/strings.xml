@@ -60,6 +60,7 @@
     <string name="fill_booking_fields">Please fill all booking fields.</string>
     <string name="booking_saved">Booking saved successfully.</string>
     <string name="payment_split_error">Online and offline amount total must match total amount.</string>
+    <string name="payment_split_remaining_error">Please fill remaining amount: %1$s</string>
     <string name="monthly_revenue_title">Current month revenue</string>
     <string name="export_revenue">Print / Export Excel</string>
     <string name="no_month_revenue">No revenue records for this month.</string>
@@ -93,6 +94,7 @@
     <string name="booking_updated">Booking updated successfully.</string>
     <string name="booking_deleted">Booking deleted successfully.</string>
     <string name="loading_message">Please wait...</string>
+    <string name="clear_revenue_filter">Clear revenue filter</string>
 
 
     <string-array name="box_selection_options">

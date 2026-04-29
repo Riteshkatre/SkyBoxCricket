@@ -15,12 +15,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.skyboxcricket.databinding.ActivityEditBookingBinding
-import kotlin.math.abs
-
 class EditBookingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditBookingBinding
     private lateinit var loadingDialog: AppLoadingDialog
+    private lateinit var paymentSplitHelper: PaymentSplitAutoFillHelper
     private val repository = BookingRepository()
     private val bookingCalendar = java.util.Calendar.getInstance()
     private val toCalendar = java.util.Calendar.getInstance()
@@ -83,6 +82,11 @@ class EditBookingActivity : AppCompatActivity() {
 
         boxPriceEditText.addTextChangedListener(amountWatcher)
         cafePriceEditText.addTextChangedListener(amountWatcher)
+        paymentSplitHelper = PaymentSplitAutoFillHelper(
+            totalAmountEditText = totalAmountEditText,
+            onlineAmountEditText = onlineAmountEditText,
+            offlineAmountEditText = offlineAmountEditText
+        ).also { it.attach() }
 
         bookingDateTimeEditText.setOnClickListener {
             pickDateTime(bookingCalendar) { value -> bookingDateTimeEditText.setText(value) }
@@ -170,8 +174,11 @@ class EditBookingActivity : AppCompatActivity() {
             return
         }
 
-        if (abs((onlineAmount + offlineAmount) - totalAmount) > 0.01) {
-            showMessage(getString(R.string.payment_split_error))
+        if (!PaymentSplitValidator.isValid(totalAmount, onlineAmount, offlineAmount)) {
+            val remainingAmount = PaymentSplitValidator.formatAmount(
+                PaymentSplitValidator.getRemainingAmount(totalAmount, onlineAmount, offlineAmount)
+            )
+            showMessage(getString(R.string.payment_split_remaining_error, remainingAmount))
             return
         }
 
@@ -220,6 +227,7 @@ class EditBookingActivity : AppCompatActivity() {
         loadingDialog.dismiss()
         binding.formContent.boxPriceEditText.removeTextChangedListener(amountWatcher)
         binding.formContent.cafePriceEditText.removeTextChangedListener(amountWatcher)
+        paymentSplitHelper.detach()
         super.onDestroy()
     }
 
